@@ -8,15 +8,11 @@ interface UpdateLoanLimitDeps {
 
 interface UpdateLoanLimitPayload {
 	executorRole: RoleName;
-	targetRole: typeof RoleName.LIBRARIAN | typeof RoleName.MEMBER; // El rol cuyo límite se quiere cambiar
-	newLimit: number; // El nuevo límite máximo de préstamos
+	targetRole: typeof RoleName.LIBRARIAN | typeof RoleName.MEMBER;
+	newLimit: number;
 }
 
-/**
- * Permite a un usuario ADMIN actualizar el límite de préstamos para un rol específico.
- * Esta acción es transaccional y modifica la regla de negocio almacenada en la DB.
- * @returns La configuración guardada (LoanLimitConfig) o un Error.
- */
+
 export async function updateLoanLimit(
 	{ loanLimitConfigRepository }: UpdateLoanLimitDeps,
 	{ executorRole, targetRole, newLimit }: UpdateLoanLimitPayload
