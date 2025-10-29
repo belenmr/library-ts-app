@@ -18,6 +18,7 @@ const mockBookRepository: BookRepository = {
 	search: vi.fn(),
 	save: vi.fn(),
 	updateAvailableCopies: vi.fn(),
+	findAll: vi.fn(),
 };
 
 const deps = {

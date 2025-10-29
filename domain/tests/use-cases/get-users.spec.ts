@@ -57,7 +57,7 @@ describe('Get Users Use Case (getUsers)', () => {
         expect(result).toEqual([]);
     });
     
-    // TEST 3: Manejo de errores de la infraestructura (opcional pero recomendado)
+    // TEST 3: Manejo de errores de la infraestructura (DB)
     test('should propagate an error if the repository fails', async () => {
         
         mockUserRepository.findAll = vi.fn().mockRejectedValue(new Error("DB Connection Failed")); // Simula un fallo de conexión a la DB
