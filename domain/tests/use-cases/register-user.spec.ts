@@ -18,9 +18,9 @@ vi.mock('crypto', () => {
 const mockUserRepository: UserRepository = {
 	findByEmail: vi.fn(),
 	save: vi.fn(),
-	findById: function (id: string): Promise<User | null> {
-		throw new Error('Function not implemented.');
-	}
+	findById: vi.fn(), 
+    findByRole: vi.fn(), 
+    findAll: vi.fn(),
 };
 
 const mockPasswordService: PasswordService = {
