@@ -12,6 +12,6 @@ export interface Loan {
 	userId: string;
 	loanDate: Date;
 	dueDate: Date;
-	returnDate: Date;
+	returnDate: Date | null;
 	status: LoanStatus;
 }

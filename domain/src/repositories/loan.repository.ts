@@ -4,6 +4,7 @@ export interface LoanRepository {
     //Lectura
     findById(id: string): Promise<Loan | null>;
     findActiveLoansByUserId(userId: string): Promise<Loan[]>;
+    findAll(): Promise<Loan[]>;
 
     //Escritura
     save(loan: Loan): Promise<void>;
