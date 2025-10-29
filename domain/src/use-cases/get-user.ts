@@ -12,10 +12,7 @@ interface GetUserPayload {
 	userId: string;
 }
 
-/**
- * Obtiene los detalles de un usuario por su identificador único (ID).
- * @returns El objeto User si es encontrado, o un Error si no existe.
- */
+
 export async function getUser(
 	{ userRepository }: GetUserDeps,
 	{ userId }: GetUserPayload
