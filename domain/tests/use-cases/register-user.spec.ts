@@ -3,7 +3,6 @@ import { registerUser } from '../../src/use-cases/register-user';
 import type { UserRepository } from '../../src/repositories';
 import type { PasswordService, RoleService } from '../../src/services';
 import { RoleName } from '../../src/entities/role';
-import { User } from '../../src';
 import { randomUUID } from 'crypto';
 
 const MOCK_NEW_ID = 'u-new-uuid';
@@ -58,7 +57,8 @@ describe('Use Case: registerUser', () => {
 		mockRoleService.getRoleByName = vi.fn().mockReturnValue(mockRole);
 
 		const payload = {
-			name: 'Belén Medina',
+			name: 'Belen',
+			surname: 'Medina',
 			email: 'belen@example.com',
 			password: '12345',
 			executorRole: RoleName.ADMIN,
@@ -75,7 +75,8 @@ describe('Use Case: registerUser', () => {
 		expect(mockUserRepository.save).toHaveBeenCalledWith(
 			expect.objectContaining({
 				id: MOCK_NEW_ID,
-				name: 'Belén Medina',
+				name: 'Belen',
+				surname: 'Medina',
 				email: 'belen@example.com',
 				role: mockRole,
 			})
@@ -89,6 +90,7 @@ describe('Use Case: registerUser', () => {
 	test('should return Error if executorRole is not ADMIN', async () => {
 		const payload = {
 			name: 'Juan',
+			surname: 'Perez',
 			email: 'juan@example.com',
 			password: '123',
 			executorRole: RoleName.MEMBER,
@@ -107,6 +109,7 @@ describe('Use Case: registerUser', () => {
 
 		const payload = {
 			name: 'Dup',
+			surname: 'Dup',
 			email: 'dup@example.com',
 			password: 'abc',
 			executorRole: RoleName.ADMIN,
@@ -126,7 +129,8 @@ describe('Use Case: registerUser', () => {
 
 		const payload = {
 			name: 'Laura',
-			email: 'laura@example.com',
+			surname: 'Gonzalez',
+			email: 'laurag@example.com',
 			password: '123',
 			executorRole: RoleName.ADMIN,
 			roleToCreate: 'INVALID_ROLE' as any,
@@ -142,6 +146,7 @@ describe('Use Case: registerUser', () => {
 	test('should return Error if any required field is missing', async () => {
 		const payload = {
 			name: '',
+			surname: '',
 			email: '',
 			password: '',
 			executorRole: RoleName.ADMIN,

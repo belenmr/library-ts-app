@@ -11,6 +11,7 @@ interface RegisterUserDeps {
 
 interface RegisterUserPayload {
 	name: string;
+	surname: string,
 	email: string;
 	password: string;
 	executorRole: RoleName;
@@ -19,14 +20,14 @@ interface RegisterUserPayload {
 
 export async function registerUser(
 	{ userRepository, passwordService, roleService }: RegisterUserDeps,
-	{ name, email, password, executorRole, roleToCreate }: RegisterUserPayload
+	{ name, surname, email, password, executorRole, roleToCreate }: RegisterUserPayload
 ): Promise<User | Error> {
 	if (executorRole !== 'ADMIN') {
 		return new Error('Access denied. Only ADMIN can register new users.');
 	}
 
-	if (!name || !email || !password || !roleToCreate) {
-		return new Error('Name, email, password, and role are required.');
+	if (!name || !surname || !email || !password || !roleToCreate) {
+		return new Error('Name, surname, email, password, and role are required.');
 	}
 
 	const foundUser = await userRepository.findByEmail(email);
@@ -44,6 +45,7 @@ export async function registerUser(
 	const newUser: User = {
 		id: randomUUID(),
 		name,
+		surname,
 		email,
 		passwordHash,
 		role,
