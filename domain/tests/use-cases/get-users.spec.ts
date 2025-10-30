@@ -7,8 +7,8 @@ import { RoleName } from '../../src/entities/role';
 
 // --- Mocks de Datos ---
 const mockUserList: User[] = [
-    { id: 'u-1', name: 'Admin', email: 'admin@test.com', passwordHash: 'hpass', role: { id: 'r-a', name: RoleName.ADMIN, permissions: [] }, hasPendingFine: false },
-    { id: 'u-2', name: 'Member', email: 'member@test.com', passwordHash: 'hpass', role: { id: 'r-m', name: RoleName.MEMBER, permissions: [] }, hasPendingFine: false },
+    { id: 'u-1', name: 'Admin', surname: 'User', email: 'admin@test.com', passwordHash: 'hpass', role: { id: 'r-a', name: RoleName.ADMIN, permissions: [] }, hasPendingFine: false },
+    { id: 'u-2', name: 'Member', surname: 'User', email: 'member@test.com', passwordHash: 'hpass', role: { id: 'r-m', name: RoleName.MEMBER, permissions: [] }, hasPendingFine: false },
 ];
 
 const mockEmptyList: User[] = [];

@@ -7,7 +7,8 @@ import { RoleName } from '../../src/entities/role';
 // --- Mocks de Datos ---
 const mockUser: User = {
     id: 'u-123',
-    name: 'Retrieved User',
+    name: 'Retrieved ',
+    surname: 'User',
     email: 'retrieve@test.com',
     passwordHash: 'hashed-data',
     role: { id: 'r-member', name: RoleName.MEMBER, permissions: [] },
@@ -16,9 +17,11 @@ const mockUser: User = {
 
 // --- Mocks de Dependencias ---
 const mockUserRepository: UserRepository = {
-    findById: vi.fn(), 
+    findById: vi.fn(),
     findByEmail: vi.fn(),
     save: vi.fn(),
+    findByRole: vi.fn(),
+    findAll: vi.fn()
 };
 
 const deps = {
