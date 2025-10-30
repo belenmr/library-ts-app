@@ -156,6 +156,6 @@ describe('Use Case: registerUser', () => {
 		const result = await registerUser(deps, payload);
 
 		expect(result instanceof Error).toBe(true);
-		expect((result as Error).message).toBe('Name, email, password, and role are required.');
+		expect((result as Error).message).toBe('Name, surname, email, password, and role are required.');
 	});
 });
