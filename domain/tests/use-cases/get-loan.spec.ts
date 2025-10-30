@@ -16,11 +16,15 @@ const mockLoan: Loan = {
 
 // --- Mocks de Dependencias ---
 const mockLoanRepository: LoanRepository = {
-	findById: vi.fn(),
-	findAll: vi.fn(),
-	save: vi.fn(),
-	findActiveLoansByUserId: vi.fn(),
-	updateStatus: vi.fn()
+    findById: vi.fn(),
+    findAll: vi.fn(),
+    save: vi.fn(),
+    findActiveLoansByUserId: vi.fn(),
+    updateStatus: vi.fn(),
+    findOverdueLoansByUserId: vi.fn(),
+    findOverdueAll: vi.fn(),
+    findLoansByUserId: vi.fn(),
+    findActiveAll: vi.fn(),
 };
 
 const deps = {

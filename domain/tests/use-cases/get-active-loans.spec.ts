@@ -18,6 +18,8 @@ const mockLoanRepository: LoanRepository = {
     findLoansByUserId: vi.fn(),
     save: vi.fn(),
     updateStatus: vi.fn(),
+    findOverdueLoansByUserId: vi.fn(),
+    findOverdueAll: vi.fn(),
 };
 
 const deps = { loanRepository: mockLoanRepository };
