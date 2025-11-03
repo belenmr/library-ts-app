@@ -6,9 +6,13 @@
 		"rootDir": "src",
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"paths": {
+      		"@domain/*": ["../../domain/src/*"], 
+      		"@src/*": ["./src/*"] 
+    }
 	},
 	"emitDecoratorMetadata": true,
 	"experimentalDecorators": true,
-	"include": ["src"]
+	"include": ["src/**/*.ts", "tests/**/*.ts"]
 }

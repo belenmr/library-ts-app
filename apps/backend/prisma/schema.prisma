@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+	provider = "prisma-client"
+	output   = "../src/generated/prisma"
+}
+
+datasource db {
+	provider = "sqlite"
+	url      = env("DATABASE_URL")
+}
+
+
+model Role {
+	name        String @id @unique // Usaremos RoleName como ID primario
+	permissions String // Almacenaremos los permisos como una cadena o JSON
+	
+	users User[]
+}
+
+model User {
+	id           String @id @default(uuid())
+	name         String
+	surname      String
+	email        String @unique
+	passwordHash String
+	hasPendingFine Boolean @default(false)
+	
+	// Relación con Role
+	roleName     String
+	role         Role   @relation(fields: [roleName], references: [name])
+	
+	// Relación con Préstamos
+	loans Loan[]
+}
+
+model Book {
+	id              String @id @default(uuid())
+	title           String
+	author          String
+	isbn            String @unique
+	totalCopies     Int
+	availableCopies Int
+	
+	loans Loan[]
+}
+
+model Loan {
+	id              String @id @default(uuid())
+	loanDate        DateTime
+	dueDate         DateTime
+	returnDate      DateTime?
+	status          String 
+
+	// Relaciones
+	userId          String
+	user            User     @relation(fields: [userId], references: [id])
+	
+	bookId          String
+	book            Book     @relation(fields: [bookId], references: [id])
+}
