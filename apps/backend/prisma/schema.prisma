@@ -63,3 +63,8 @@ model Loan {
 	bookId          String
 	book            Book     @relation(fields: [bookId], references: [id])
 }
+
+model Configuration {
+  key    String @id @unique // La clave será el nombre del rol (ej: "LOAN_LIMIT_MEMBER")
+  value  String             // El valor del límite (ej: "2") se guarda como String
+}
