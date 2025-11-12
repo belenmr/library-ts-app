@@ -12,10 +12,12 @@
   "type": "commonjs",
   "dependencies": {
     "@prisma/client": "^6.17.1",
+    "@types/node-cron": "^3.0.11",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "node-cron": "^4.2.1",
     "prisma": "^6.18.0",
     "zod": "^4.1.12"
   },
