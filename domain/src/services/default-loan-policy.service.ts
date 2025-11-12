@@ -16,7 +16,9 @@ export class DefaultLoanPolicyService implements LoanPolicyService {
 	
 	constructor(private readonly configRepository: LoanLimitConfigRepository) {}
 
-	// Función auxiliar para obtener el límite: lee primero de la DB, si falla, usa el valor por defecto
+	/**
+	 * Función auxiliar para obtener el límite: lee primero de la DB, si falla, usa el valor por defecto
+	 */
 	private async getLimit(roleName: RoleName): Promise<number> {
 		const config = await this.configRepository.findLoanLimitByRole(roleName);
 		
@@ -29,7 +31,7 @@ export class DefaultLoanPolicyService implements LoanPolicyService {
 
 	/**
 	 * Verifica si el usuario puede pedir prestado.
-	 * La lógica de multa se asume que está en la Entidad User.
+	 * Implementa las reglas de límite y sanción (multa).
 	 */
 	async canUserBorrow(user: User, activeLoans: Loan[]): Promise<boolean> {
 		if (user.hasPendingFine) {
@@ -45,10 +47,14 @@ export class DefaultLoanPolicyService implements LoanPolicyService {
 		return true;
 	}
 
+	/**
+     * Determina si un préstamo DEBE ser considerado vencido, basándose en las fechas.
+     */
 	isLoanOverdue(loan: Loan): boolean {
-		if (loan.returnDate) {
-			return false;
-		}
+
+		if (loan.status === 'RETURNED' || loan.returnDate !== null) {
+            return false;
+        }
 
 		const today = new Date();
 		return today > loan.dueDate;
