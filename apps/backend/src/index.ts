@@ -11,11 +11,23 @@ import { DefaultRoleService } from '@domain/services/default-role.service';
 import { DefaultLoanPolicyService } from '@domain/services/default-loan-policy.service';
 
 import { OverdueCheckerService } from './jobs/overdue-checker.service';
+import { createAuthRouter } from './routes/auth.router';
+import { createUserRouter } from './routes/user.router';
+import { BcryptPasswordService } from './adapters/bcrypt-password.service';
+import { JwtTokenService } from './adapters/jwt-token.service';
+
+// --- USE CASES ---
+import { login } from '@domain/use-cases/login';
+import { registerUser } from '@domain/use-cases/register-user';
+import { getUser } from '@domain/use-cases/get-user';
+import { getUsers } from '@domain/use-cases/get-users';
+import { updateUser } from '@domain/use-cases/update-user';
 
 
 const roleService = new DefaultRoleService();
 
-// Adaptadores de Persistencia
+const passwordService = new BcryptPasswordService();
+const tokenService = new JwtTokenService();
 const configRepository = new ConfigPrismaRepository(prisma);
 const userRepository = new UserPrismaRepository(prisma, roleService);
 const loanRepository = new LoanPrismaRepository(prisma);
@@ -28,6 +40,48 @@ const overdueCheckerService = new OverdueCheckerService(
     userRepository
 );
 
+// Use case: login
+const loginUserUseCase = (payload: any) => login({ 
+    userRepository, 
+    passwordService, 
+    tokenService 
+}, payload);
+
+const authControllerDeps = {
+    loginUserUseCase: loginUserUseCase,
+};
+
+// Use cases: users
+const registerUserUseCase = (payload: any) => registerUser({ 
+    userRepository, 
+    passwordService, 
+    roleService 
+}, payload);
+
+const getUserUseCase = (payload: any) => getUser({ 
+    userRepository 
+}, payload);
+
+const getUsersUseCase = () => getUsers({ 
+    userRepository 
+});
+
+const updateUserUseCase = (payload: any) => updateUser({ 
+    userRepository 
+}, payload);
+
+const userControllerDeps = {
+    registerUserUseCase: registerUserUseCase,
+    getUserUseCase: getUserUseCase,
+    getUsersUseCase: getUsersUseCase,
+    updateUserUseCase: updateUserUseCase,
+};
+
+// ----------------------------------------------------
+// ROUTERS
+// ----------------------------------------------------
+const authRouter = createAuthRouter(authControllerDeps);
+const userRouter = createUserRouter(userControllerDeps);
 
 // ----------------------------------------------------
 // CONFIGURACIÓN DEL SERVIDOR EXPRESS
@@ -39,9 +93,15 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+/*
 app.get('/', (req, res) => {
     res.send('Library Backend Running!');
 });
+*/
+
+// Routes
+app.use('/auth', authRouter);
+app.use('/users', userRouter);
 
 // ----------------------------------------------------
 // INICIO DEL SERVIDOR Y CRON JOB

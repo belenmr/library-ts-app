@@ -1,35 +1,39 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "vitest"
-  },
-  "keywords": [],
-  "author": "Belen Medina",
-  "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {
-    "@prisma/client": "^6.17.1",
-    "@types/node-cron": "^3.0.11",
-    "bcrypt": "^6.0.0",
-    "dotenv": "^17.2.3",
-    "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "node-cron": "^4.2.1",
-    "prisma": "^6.18.0",
-    "zod": "^4.1.12"
-  },
-  "devDependencies": {
-    "@types/bcrypt": "^6.0.0",
-    "@types/express": "^5.0.3",
-    "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^24.9.1",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
-    "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.9.3",
-    "vitest": "^3.2.4"
-  }
+	"name": "backend",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"start": "ts-node src/index.ts",
+		"dev": "ts-node-dev --respawn --transpile-only -r tsconfig-paths/register src/index.ts",
+		"test": "vitest",
+		"db:generate": "npx ts-node -r dotenv/config node_modules/prisma/build/index.js generate",
+		"db:seed": "npx ts-node -r dotenv/config -r tsconfig-paths/register src/seeds/initialData.ts"
+	},
+	"keywords": [],
+	"author": "Belen Medina",
+	"license": "ISC",
+	"type": "commonjs",
+	"dependencies": {
+		"@prisma/client": "^6.17.1",
+		"@types/node-cron": "^3.0.11",
+		"bcrypt": "^6.0.0",
+		"dotenv": "^17.2.3",
+		"express": "^5.1.0",
+		"jsonwebtoken": "^9.0.2",
+		"node-cron": "^4.2.1",
+		"prisma": "^6.18.0",
+		"zod": "^4.1.12"
+	},
+	"devDependencies": {
+		"@types/bcrypt": "^6.0.0",
+		"@types/express": "^5.0.3",
+		"@types/jsonwebtoken": "^9.0.10",
+		"@types/node": "^24.9.1",
+		"ts-node": "^10.9.2",
+		"ts-node-dev": "^2.0.0",
+		"tsconfig-paths": "^4.2.0",
+		"typescript": "^5.9.3",
+		"vitest": "^3.2.4"
+	}
 }
