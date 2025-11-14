@@ -6,15 +6,17 @@ import { prisma } from './adapters/prisma-client';
 import { UserPrismaRepository } from './adapters/user-prisma.repository';
 import { LoanPrismaRepository } from './adapters/loan-prisma.repository';
 import { ConfigPrismaRepository } from './adapters/config-prisma.repository';
+import { BookPrismaRepository } from './adapters/book-prisma.repository';
 
 import { DefaultRoleService } from '@domain/services/default-role.service';
 import { DefaultLoanPolicyService } from '@domain/services/default-loan-policy.service';
-
 import { OverdueCheckerService } from './jobs/overdue-checker.service';
-import { createAuthRouter } from './routes/auth.router';
-import { createUserRouter } from './routes/user.router';
 import { BcryptPasswordService } from './adapters/bcrypt-password.service';
 import { JwtTokenService } from './adapters/jwt-token.service';
+
+import { createAuthRouter } from './routes/auth.router';
+import { createUserRouter } from './routes/user.router';
+import { createBookRouter } from './routes/book.router';
 
 // --- USE CASES ---
 import { login } from '@domain/use-cases/login';
@@ -22,6 +24,9 @@ import { registerUser } from '@domain/use-cases/register-user';
 import { getUser } from '@domain/use-cases/get-user';
 import { getUsers } from '@domain/use-cases/get-users';
 import { updateUser } from '@domain/use-cases/update-user';
+import { addBook } from '@domain/use-cases/add-book.js';
+import { getBook } from '@domain/use-cases/get-book.js';
+import { getBooks } from '@domain/use-cases/get-books.js';
 
 
 const roleService = new DefaultRoleService();
@@ -31,6 +36,7 @@ const tokenService = new JwtTokenService();
 const configRepository = new ConfigPrismaRepository(prisma);
 const userRepository = new UserPrismaRepository(prisma, roleService);
 const loanRepository = new LoanPrismaRepository(prisma);
+const bookRepository = new BookPrismaRepository(prisma);
 
 const loanPolicyService = new DefaultLoanPolicyService(configRepository);
 
@@ -77,11 +83,23 @@ const userControllerDeps = {
     updateUserUseCase: updateUserUseCase,
 };
 
+// use cases: book
+const addBookUseCase = (payload: any) => addBook({ bookRepository }, payload);
+const getBookUseCase = (payload: any) => getBook({ bookRepository }, payload);
+const getBooksUseCase = () => getBooks({ bookRepository });
+
+const bookControllerDeps = {
+    addBookUseCase: addBookUseCase,
+    getBookUseCase: getBookUseCase,
+    getBooksUseCase: getBooksUseCase,
+};
+
 // ----------------------------------------------------
 // ROUTERS
 // ----------------------------------------------------
 const authRouter = createAuthRouter(authControllerDeps);
 const userRouter = createUserRouter(userControllerDeps);
+const bookRouter = createBookRouter(bookControllerDeps);
 
 // ----------------------------------------------------
 // CONFIGURACIÓN DEL SERVIDOR EXPRESS
@@ -102,6 +120,7 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
+app.use('/books', bookRouter);
 
 // ----------------------------------------------------
 // INICIO DEL SERVIDOR Y CRON JOB

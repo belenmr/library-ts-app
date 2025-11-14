@@ -10,16 +10,13 @@ export const createUserRouter = (deps: UserControllerDeps): Router => {
     const userController = new UserController(deps);
 
     // 1. Rutas Públicas (Registro)
-    // POST /users/register
     router.post('/register', userController.register); 
     
-    // NOTA: A partir de aquí, deberías montar un middleware de autenticación/autorización
-    // (Ej: router.use(authMiddleware);)
-
+    // NOTA: A partir de aquí, middleware de autenticación
     // 2. Rutas Protegidas (CRUD, Lectura)
-    router.get('/', userController.getUsers);           // GET /users 
-    router.get('/:id', userController.getUser);         // GET /users/:id
-    router.put('/:id', userController.updateUser);      // PUT /users/:id
+    router.get('/', userController.getUsers);
+    router.get('/:id', userController.getUser);
+    router.put('/:id', userController.updateUser);
 
     return router;
 };
