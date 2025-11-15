@@ -27,6 +27,14 @@ import { updateUser } from '@domain/use-cases/update-user';
 import { addBook } from '@domain/use-cases/add-book.js';
 import { getBook } from '@domain/use-cases/get-book.js';
 import { getBooks } from '@domain/use-cases/get-books.js';
+import { createLoan } from '@domain/use-cases/create-loan';
+import { endLoan } from '@domain/use-cases/end-loan';
+import { getLoan } from '@domain/use-cases/get-loan';
+import { getLoans } from '@domain/use-cases/get-loans';
+import { getActiveLoans } from '@domain/use-cases/get-active-loans';
+import { getOverdueLoans } from '@domain/use-cases/get-overdue-loans';
+import { hasPendingFine } from '@domain/use-cases/has-pending-fine';
+import { createLoanRouter } from './routes/loan.router';
 
 
 const roleService = new DefaultRoleService();
@@ -94,12 +102,32 @@ const bookControllerDeps = {
     getBooksUseCase: getBooksUseCase,
 };
 
+// use cases: loan
+const createLoanUseCase = (payload: any) => createLoan({ userRepository, bookRepository, loanRepository, loanPolicyService }, payload);
+const endLoanUseCase = (payload: any) => endLoan({ loanRepository, bookRepository }, payload);
+const getLoanUseCase = (payload: any) => getLoan({ loanRepository }, payload);
+const getLoansUseCase = (payload: any) => getLoans({ loanRepository }, payload);
+const getActiveLoansUseCase = (payload: any) => getActiveLoans({ loanRepository }, payload);
+const getOverdueLoansUseCase = (payload: any) => getOverdueLoans({ loanRepository }, payload);
+const hasPendingFineUseCase = (payload: any) => hasPendingFine({ loanRepository }, payload);
+
+const loanControllerDeps = {
+    createLoanUseCase,
+    endLoanUseCase,
+    getLoanUseCase,
+    getLoansUseCase,
+    getActiveLoansUseCase,
+    getOverdueLoansUseCase,
+    hasPendingFineUseCase,
+};
+
 // ----------------------------------------------------
 // ROUTERS
 // ----------------------------------------------------
 const authRouter = createAuthRouter(authControllerDeps);
 const userRouter = createUserRouter(userControllerDeps);
 const bookRouter = createBookRouter(bookControllerDeps);
+const loanRouter = createLoanRouter(loanControllerDeps);
 
 // ----------------------------------------------------
 // CONFIGURACIÓN DEL SERVIDOR EXPRESS
@@ -121,6 +149,7 @@ app.get('/', (req, res) => {
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/books', bookRouter);
+app.use('/loans', loanRouter);
 
 // ----------------------------------------------------
 // INICIO DEL SERVIDOR Y CRON JOB
