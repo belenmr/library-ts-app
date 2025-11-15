@@ -48,6 +48,11 @@ export class UserController {
     // ------------------------------------
     public getUser = async (req: Request, res: Response) => {
         const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({ error: "User ID parameter is missing." });
+        }
+
         try {
             const result = await this.deps.getUserUseCase({ userId: id });
             
