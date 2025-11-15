@@ -17,6 +17,8 @@ import { JwtTokenService } from './adapters/jwt-token.service';
 import { createAuthRouter } from './routes/auth.router';
 import { createUserRouter } from './routes/user.router';
 import { createBookRouter } from './routes/book.router';
+import { createConfigRouter } from './routes/config.router';
+import { createLoanRouter } from './routes/loan.router';
 
 // --- USE CASES ---
 import { login } from '@domain/use-cases/login';
@@ -34,7 +36,13 @@ import { getLoans } from '@domain/use-cases/get-loans';
 import { getActiveLoans } from '@domain/use-cases/get-active-loans';
 import { getOverdueLoans } from '@domain/use-cases/get-overdue-loans';
 import { hasPendingFine } from '@domain/use-cases/has-pending-fine';
-import { createLoanRouter } from './routes/loan.router';
+import { updateLoanLimit } from '@domain/use-cases/update-loan-limit';
+
+import { ConfigControllerDeps } from './controllers/config.controller';
+import { BookControllerDeps } from './controllers/book.controller';
+import { UserControllerDeps } from './controllers/user.controller';
+import { AuthControllerDeps } from './controllers/auth.controller';
+import { LoanControllerDeps } from './controllers/loan.controller';
 
 
 const roleService = new DefaultRoleService();
@@ -61,7 +69,7 @@ const loginUserUseCase = (payload: any) => login({
     tokenService 
 }, payload);
 
-const authControllerDeps = {
+const authControllerDeps : AuthControllerDeps = {
     loginUserUseCase: loginUserUseCase,
 };
 
@@ -84,7 +92,7 @@ const updateUserUseCase = (payload: any) => updateUser({
     userRepository 
 }, payload);
 
-const userControllerDeps = {
+const userControllerDeps : UserControllerDeps = {
     registerUserUseCase: registerUserUseCase,
     getUserUseCase: getUserUseCase,
     getUsersUseCase: getUsersUseCase,
@@ -96,7 +104,7 @@ const addBookUseCase = (payload: any) => addBook({ bookRepository }, payload);
 const getBookUseCase = (payload: any) => getBook({ bookRepository }, payload);
 const getBooksUseCase = () => getBooks({ bookRepository });
 
-const bookControllerDeps = {
+const bookControllerDeps : BookControllerDeps = {
     addBookUseCase: addBookUseCase,
     getBookUseCase: getBookUseCase,
     getBooksUseCase: getBooksUseCase,
@@ -111,7 +119,7 @@ const getActiveLoansUseCase = (payload: any) => getActiveLoans({ loanRepository 
 const getOverdueLoansUseCase = (payload: any) => getOverdueLoans({ loanRepository }, payload);
 const hasPendingFineUseCase = (payload: any) => hasPendingFine({ loanRepository }, payload);
 
-const loanControllerDeps = {
+const loanControllerDeps : LoanControllerDeps = {
     createLoanUseCase,
     endLoanUseCase,
     getLoanUseCase,
@@ -121,6 +129,12 @@ const loanControllerDeps = {
     hasPendingFineUseCase,
 };
 
+// use cases: update loan limit
+const updateLoanLimitUseCase = (payload: any) => updateLoanLimit({ loanLimitConfigRepository : configRepository }, payload);
+const configControllerDeps: ConfigControllerDeps = {
+    updateLoanLimitUseCase: updateLoanLimitUseCase,
+};
+
 // ----------------------------------------------------
 // ROUTERS
 // ----------------------------------------------------
@@ -128,6 +142,7 @@ const authRouter = createAuthRouter(authControllerDeps);
 const userRouter = createUserRouter(userControllerDeps);
 const bookRouter = createBookRouter(bookControllerDeps);
 const loanRouter = createLoanRouter(loanControllerDeps);
+const configRouter = createConfigRouter(configControllerDeps);
 
 // ----------------------------------------------------
 // CONFIGURACIÓN DEL SERVIDOR EXPRESS
@@ -150,6 +165,7 @@ app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/books', bookRouter);
 app.use('/loans', loanRouter);
+app.use('/config', configRouter);
 
 // ----------------------------------------------------
 // INICIO DEL SERVIDOR Y CRON JOB
