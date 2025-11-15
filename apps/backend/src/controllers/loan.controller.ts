@@ -10,7 +10,7 @@ type GetActiveLoansUseCase = (payload: { userId?: string }) => Promise<Loan[] | 
 type GetOverdueLoansUseCase = (payload: { userId?: string }) => Promise<Loan[] | Error>;
 type HasPendingFineUseCase = (payload: { userId: string }) => Promise<boolean | Error>;
 
-interface LoanControllerDeps {
+export interface LoanControllerDeps {
 	createLoanUseCase: CreateLoanUseCase;
 	endLoanUseCase: EndLoanUseCase;
 	getLoanUseCase: GetLoanUseCase;

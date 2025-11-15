@@ -6,7 +6,7 @@ type AddBookUseCase = (payload: any) => Promise<Book | Error>;
 type GetBookUseCase = (payload: { bookId: string }) => Promise<Book | Error>;
 type GetBooksUseCase = () => Promise<Book[] | Error>;
 
-interface BookControllerDeps {
+export interface BookControllerDeps {
     addBookUseCase: AddBookUseCase;
     getBookUseCase: GetBookUseCase;
     getBooksUseCase: GetBooksUseCase;

@@ -7,7 +7,7 @@ type GetUserUseCase = (payload: { userId: string }) => Promise<User | Error>;
 type GetUsersUseCase = () => Promise<User[]>; // Retorna Promise<User[]> debido a la firma simple
 type UpdateUserUseCase = (payload: any) => Promise<User | Error>;
 
-interface UserControllerDeps {
+export interface UserControllerDeps {
     registerUserUseCase: RegisterUseCase;
     getUserUseCase: GetUserUseCase;
     getUsersUseCase: GetUsersUseCase;

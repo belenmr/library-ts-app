@@ -3,7 +3,7 @@ import type { LoginResponse } from '@domain/use-cases/login';
 
 type LoginUseCase = (payload: { email: string; password: string; }) => Promise<LoginResponse | Error>;
 
-interface AuthControllerDeps {
+export interface AuthControllerDeps {
 	loginUserUseCase: LoginUseCase;
 }
 
