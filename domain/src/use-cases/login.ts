@@ -10,7 +10,7 @@ interface LoginDeps {
 }
 
 // --- Datos de Entrada ---
-interface LoginPayload {
+export interface LoginPayload {
 	email: string;
 	password: string;
 }
@@ -26,7 +26,7 @@ export async function login(
 	{ userRepository, passwordService, tokenService }: LoginDeps,
 	{ email, password }: LoginPayload
 ): Promise<LoginResponse | Error> {
-	
+
 	if (!email || !password) {
 		return new Error("Email and password are required.");
 	}
@@ -37,7 +37,7 @@ export async function login(
 	}
 
 	const passwordMatch = await passwordService.compare(password, user.passwordHash);
-	
+
 	if (!passwordMatch) {
 		return new Error("Invalid credentials.");
 	}

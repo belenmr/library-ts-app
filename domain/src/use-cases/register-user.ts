@@ -9,7 +9,7 @@ interface RegisterUserDeps {
 	roleService: RoleService;
 }
 
-interface RegisterUserPayload {
+export interface RegisterUserPayload {
 	name: string;
 	surname: string,
 	email: string;
