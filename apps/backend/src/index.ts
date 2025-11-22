@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv';
 import express from 'express';
 import * as cron from 'node-cron';
 import { prisma } from './adapters/prisma-client';
+import cors from 'cors';
 
 import { UserPrismaRepository } from './adapters/user-prisma.repository';
 import { LoanPrismaRepository } from './adapters/loan-prisma.repository';
@@ -63,36 +64,36 @@ const overdueCheckerService = new OverdueCheckerService(
 );
 
 // Use case: login
-const loginUserUseCase = (payload: any) => login({ 
-    userRepository, 
-    passwordService, 
-    tokenService 
+const loginUserUseCase = (payload: any) => login({
+    userRepository,
+    passwordService,
+    tokenService
 }, payload);
 
-const authControllerDeps : AuthControllerDeps = {
+const authControllerDeps: AuthControllerDeps = {
     loginUserUseCase: loginUserUseCase,
 };
 
 // Use cases: users
-const registerUserUseCase = (payload: any) => registerUser({ 
-    userRepository, 
-    passwordService, 
-    roleService 
+const registerUserUseCase = (payload: any) => registerUser({
+    userRepository,
+    passwordService,
+    roleService
 }, payload);
 
-const getUserUseCase = (payload: any) => getUser({ 
-    userRepository 
+const getUserUseCase = (payload: any) => getUser({
+    userRepository
 }, payload);
 
-const getUsersUseCase = () => getUsers({ 
-    userRepository 
+const getUsersUseCase = () => getUsers({
+    userRepository
 });
 
-const updateUserUseCase = (payload: any) => updateUser({ 
-    userRepository 
+const updateUserUseCase = (payload: any) => updateUser({
+    userRepository
 }, payload);
 
-const userControllerDeps : UserControllerDeps = {
+const userControllerDeps: UserControllerDeps = {
     registerUserUseCase: registerUserUseCase,
     getUserUseCase: getUserUseCase,
     getUsersUseCase: getUsersUseCase,
@@ -104,7 +105,7 @@ const addBookUseCase = (payload: any) => addBook({ bookRepository }, payload);
 const getBookUseCase = (payload: any) => getBook({ bookRepository }, payload);
 const getBooksUseCase = () => getBooks({ bookRepository });
 
-const bookControllerDeps : BookControllerDeps = {
+const bookControllerDeps: BookControllerDeps = {
     addBookUseCase: addBookUseCase,
     getBookUseCase: getBookUseCase,
     getBooksUseCase: getBooksUseCase,
@@ -119,7 +120,7 @@ const getActiveLoansUseCase = (payload: any) => getActiveLoans({ loanRepository 
 const getOverdueLoansUseCase = (payload: any) => getOverdueLoans({ loanRepository }, payload);
 const hasPendingFineUseCase = (payload: any) => hasPendingFine({ loanRepository }, payload);
 
-const loanControllerDeps : LoanControllerDeps = {
+const loanControllerDeps: LoanControllerDeps = {
     createLoanUseCase,
     endLoanUseCase,
     getLoanUseCase,
@@ -130,7 +131,7 @@ const loanControllerDeps : LoanControllerDeps = {
 };
 
 // use cases: update loan limit
-const updateLoanLimitUseCase = (payload: any) => updateLoanLimit({ loanLimitConfigRepository : configRepository }, payload);
+const updateLoanLimitUseCase = (payload: any) => updateLoanLimit({ loanLimitConfigRepository: configRepository }, payload);
 const configControllerDeps: ConfigControllerDeps = {
     updateLoanLimitUseCase: updateLoanLimitUseCase,
 };
@@ -152,6 +153,13 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// CONFIGURACIÓN DE CORS
+app.use(cors({
+    origin: 'http://localhost:5173', // La URL de tu frontend (Vite)
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Métodos HTTP que el frontend puede usar
+    credentials: true
+}));
+
 app.use(express.json());
 
 /*
@@ -171,8 +179,8 @@ app.use('/config', configRouter);
 // INICIO DEL SERVIDOR Y CRON JOB
 // ----------------------------------------------------
 
-app.listen(PORT, async () => {    
-    
+app.listen(PORT, async () => {
+
     try {
         await prisma.$connect();
         console.log('Database connection successful.');
@@ -184,9 +192,9 @@ app.listen(PORT, async () => {
     cron.schedule('0 2 * * *', async () => {
         try {
             console.log('CRON: Ejecutando chequeo diario de vencimiento y multas...');
-            
+
             await overdueCheckerService.checkAndMarkOverdue();
-            
+
         } catch (error) {
             console.error('CRON ERROR: Fallo al actualizar préstamos vencidos.', error);
         }
