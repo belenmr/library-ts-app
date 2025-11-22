@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:3000';
 
-export const httpClient = axios.create({
+export const HttpClient = axios.create({
 	baseURL: API_URL,
 	headers: {
 		'Content-Type': 'application/json',
