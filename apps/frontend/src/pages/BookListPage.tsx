@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import type { Book } from '@domain/entities';
-import { BookModule } from '../utils/BookModule';
+import { bookModule } from '../utils/bookModule';
 import { BookCard } from '../components/BookCard/BookCard';
 
 export const BookListPage: React.FC = () => {
@@ -13,7 +13,7 @@ export const BookListPage: React.FC = () => {
 		setIsLoading(true);
 		setError(null); // Limpia errores anteriores
 		try {
-			const result = await BookModule.getBooks();
+			const result = await bookModule.getBooks();
 
 			if (result instanceof Error) {
 				// Manejo de error de Backend

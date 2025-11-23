@@ -5,6 +5,6 @@ import { getBooks } from '@domain/use-cases/get-books';
 
 const bookRepositoryInstance = new BookApiRepository();
 
-export const BookModule = {
+export const bookModule = {
 	getBooks: () => getBooks({ bookRepository: bookRepositoryInstance }),
 };
