@@ -4,6 +4,8 @@ import { AppLayout } from './components/AppLayout/AppLayout';
 import { BookListPage } from './pages/BookListPage';
 import { AdminPage } from './pages/AdminPage';
 import { NewLoanPage } from './pages/NewLoanPage';
+import { ViewUsersPage } from './pages/ViewUsersPage';
+import { ViewLoansPage } from './pages/ViewLoansPage';
 
 function App() {
 	return (
@@ -17,11 +19,12 @@ function App() {
 
 					{/* <Route path="/admin" element={<AdminPage />} /> */}
 
+					<Route path="admin/new-user" element={<div>[Formulario Nuevo Usuario]</div>} />
 					<Route path="admin/new-book" element={<div>[Formulario Nuevo Libro]</div>} />
 					<Route path="admin/new-loan" element={<NewLoanPage />} />
 					<Route path="admin/end-loan" element={<div>[Formulario Finalizar Préstamo]</div>} />
-					<Route path="admin/view-users" element={<div>[Tabla de Usuarios]</div>} />
-					<Route path="admin/view-loans" element={<div>[Tabla de Préstamos]</div>} />
+					<Route path="admin/view-users" element={<ViewUsersPage />} />
+					<Route path="admin/view-loans" element={<ViewLoansPage />} />
 
 
 					{/* Ruta de fallback 404 */}

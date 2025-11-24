@@ -9,4 +9,5 @@ export const userModule = {
     findUserById: (userId: string) => userRepositoryInstance.findById(userId),
     findLoanHistory: (userId: string) => loanRepositoryInstance.findLoansByUserId(userId),
     findMembers: () => userRepositoryInstance.findByRole(RoleName.MEMBER),
+    findUsers: () => userRepositoryInstance.findAll(),
 };
