@@ -7,4 +7,6 @@ const bookRepositoryInstance = new BookApiRepository();
 
 export const bookModule = {
 	getBooks: () => getBooks({ bookRepository: bookRepositoryInstance }),
+	addBook: (payload: { title: string; author: string; isbn: string; copies: number }) =>
+		bookRepositoryInstance.addBook(payload),
 };

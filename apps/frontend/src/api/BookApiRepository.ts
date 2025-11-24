@@ -25,7 +25,15 @@ export class BookApiRepository implements BookRepository {
 	}
 
 	async save(book: Book): Promise<void> {
-		await httpClient.post('/books', book);
+		throw new Error("save(book: Book) no implementado en el frontend. Usa addBook(payload) para crear/actualizar copias.");
+	}
+
+	async addBook(payload: { title: string; author: string; isbn: string; copies: number }): Promise<void> {
+		try {
+			await httpClient.post('/books', payload);
+		} catch (error) {
+			throw new Error((error as any).response?.data?.message || 'Error de addBook en backend.');
+		}
 	}
 
 	async updateAvailableCopies(id: string, availableCopies: number): Promise<void> {
