@@ -12,19 +12,15 @@ export class LoanApiRepository implements LoanRepository {
             });
         } catch (error) {
             const backendError = (error as any).response?.data?.message;
-            throw new Error(backendError || 'Error desconocido al crear el préstamo.');
+            throw new Error(backendError || 'Error al crear el préstamo.');
         }
     }
 
     async findLoansByUserId(userId: string): Promise<Loan[]> {
-        const response = await httpClient.get(`/loans?userId=${userId}`);
+        const response = await httpClient.get(`/loans/${userId}`);
         return response.data;
     }
 
-    async findActiveLoansByUserId(userId: string): Promise<Loan[]> {
-        const response = await httpClient.get(`/loans/active?userId=${userId}`);
-        return response.data;
-    }
 
     async findById(id: string): Promise<Loan | null> {
         const response = await httpClient.get(`/loans/${id}`);
@@ -45,13 +41,22 @@ export class LoanApiRepository implements LoanRepository {
         return response.data;
     }
 
+
+    async findActiveLoansByUserId(userId: string): Promise<Loan[]> {
+        const response = await httpClient.get(`/loans/active?userId=${userId}`);
+        return response.data;
+    }
+
+
     async findOverdueAll(): Promise<Loan[]> {
         const response = await httpClient.get('/loans/overdue');
         return response.data;
     }
 
+
     async findOverdueLoansByUserId(userId: string): Promise<Loan[]> {
         const response = await httpClient.get(`/loans/overdue?userId=${userId}`);
         return response.data;
     }
+
 }

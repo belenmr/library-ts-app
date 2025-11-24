@@ -8,7 +8,7 @@ export const AppLayout: React.FC = () => {
 			<header className="bg-gray-800 text-white p-4 shadow-md">
 				<nav className="max-w-7xl mx-auto flex justify-between items-center">
 					<Link to="/" className="text-2xl font-bold hover:text-blue-400 transition-colors">
-						📚 Sistema de Gestión de Biblioteca 📚
+						📚 Biblioteca 📚
 					</Link>
 					<div className="space-x-4 text-sm font-medium">
 						<Link to="/books" className="hover:text-gray-400">Catálogo</Link>

@@ -5,8 +5,9 @@ import { httpClient } from './httpClient';
 export class UserApiRepository implements UserRepository {
 
     async findByEmail(email: string): Promise<User | null> {
-        const response = await httpClient.get(`/users/email/${email}`);
-        return response.data;
+        const allUsers = await this.findAll();
+        const filteredUsers = allUsers.filter(user => user.email === email);
+        return filteredUsers[0];
     }
 
     async findById(id: string): Promise<User | null> {
@@ -15,8 +16,9 @@ export class UserApiRepository implements UserRepository {
     }
 
     async findByRole(roleName: RoleName): Promise<User[]> {
-        const response = await httpClient.get(`/users/role/${roleName}`);
-        return response.data;
+        const allUsers = await this.findAll();
+        const filteredUsers = allUsers.filter(user => user.role.name === roleName);
+        return filteredUsers;
     }
 
     async findAll(): Promise<User[]> {
