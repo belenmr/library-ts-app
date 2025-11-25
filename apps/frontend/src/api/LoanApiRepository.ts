@@ -59,4 +59,13 @@ export class LoanApiRepository implements LoanRepository {
         return response.data;
     }
 
+    async endLoan(loanId: string): Promise<void> {
+        try {
+            await httpClient.patch(`/loans/${loanId}/return`, {});
+        } catch (error) {
+            const backendError = (error as any).response?.data?.message;
+            throw new Error(backendError || 'Error desconocido al finalizar el préstamo.');
+        }
+    }
+
 }

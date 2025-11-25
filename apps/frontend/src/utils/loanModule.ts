@@ -11,6 +11,19 @@ interface EnrichedLoan extends Loan {
 	userEmail: string;
 }
 
+interface EnrichedEndLoan {
+	id: string;
+	bookId: string;
+	userId: string;
+	loanDate: Date;
+	dueDate: Date;
+	returnDate: Date | null;
+	status: string;
+	bookTitle: string;
+	bookIsbn: string;
+	userEmail: string;
+}
+
 export const loanModule = {
 	createLoan: async (userId: string, bookId: string): Promise<void> => {
 
@@ -54,4 +67,39 @@ export const loanModule = {
 			return new Error(`Error al obtener datos de préstamos: ${(error as Error).message}`);
 		}
 	},
+
+
+	async findOngoingLoans(): Promise<EnrichedLoan[] | Error> {
+		try {
+			const loans = await loanRepositoryInstance.findAll();
+
+
+			const ongoingLoans = loans.filter(loan => loan.status !== 'RETURNED');
+
+			const allBooks = await bookModule.getBooks();
+			const allUsers = await userModule.findUsers();
+
+			const bookMap = new Map(allBooks.map(book => [book.id, book]));
+			const userMap = new Map(allUsers.map(user => [user.id, user]));
+
+			const enrichedLoans: EnrichedLoan[] = ongoingLoans.map(loan => {
+				const book = bookMap.get(loan.bookId);
+				const user = userMap.get(loan.userId);
+
+				return {
+					...loan,
+					bookTitle: book?.title || 'Libro Desconocido',
+					bookIsbn: book?.isbn || 'N/A',
+					userEmail: user?.email || 'Usuario Desconocido',
+				} as EnrichedLoan;
+			});
+
+			return enrichedLoans;
+
+		} catch (error) {
+			return new Error(`Error al obtener préstamos pendientes: ${(error as Error).message}`);
+		}
+	},
+
+	endLoan: (loanId: string) => loanRepositoryInstance.endLoan(loanId),
 };

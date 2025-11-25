@@ -8,6 +8,7 @@ import { ViewUsersPage } from './pages/ViewUsersPage';
 import { ViewLoansPage } from './pages/ViewLoansPage';
 import { NewBookPage } from './pages/NewBookPage';
 import { RegisterPage } from './pages/RegisterPage';
+import { EndLoanPage } from './pages/EndLoanPage';
 
 function App() {
 	return (
@@ -24,7 +25,7 @@ function App() {
 					<Route path="admin/new-user" element={<RegisterPage />} />
 					<Route path="admin/new-book" element={<NewBookPage />} />
 					<Route path="admin/new-loan" element={<NewLoanPage />} />
-					<Route path="admin/end-loan" element={<div>[Formulario Finalizar Préstamo]</div>} />
+					<Route path="admin/end-loan" element={<EndLoanPage />} />
 					<Route path="admin/view-users" element={<ViewUsersPage />} />
 					<Route path="admin/view-loans" element={<ViewLoansPage />} />
 
