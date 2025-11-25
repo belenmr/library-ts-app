@@ -27,7 +27,7 @@ export const AdminPage: React.FC = () => {
 				{/* --- Módulo de Creación y Edición --- */}
 				<div className="md:col-span-3 lg:col-span-1 p-6 bg-white shadow-xl rounded-lg border-t-4 border-t-indigo-500 space-y-4">
 					<h2 className="text-xl font-bold text-indigo-700 mb-3">Crear Nuevo</h2>
-					<Button to="/register">👤 Nuevo Usuario</Button>
+					<Button to="/admin/new-user">👤 Nuevo Usuario</Button>
 					<Button to="/admin/new-book">📘 Nuevo Libro</Button>
 				</div>
 
