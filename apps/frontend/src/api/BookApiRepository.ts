@@ -10,8 +10,15 @@ export class BookApiRepository implements BookRepository {
 	}
 
 	async findById(id: string): Promise<Book | null> {
-		const response = await httpClient.get(`/books/${id}`);
-		return response.data;
+		try {
+			const response = await httpClient.get(`/books/${id}`);
+			return response.data as Book;
+		} catch (error) {
+			if ((error as any).response?.status === 404) {
+				return null;
+			}
+			throw new Error('Error al buscar el libro por ID.');
+		}
 	}
 
 	async search(query: string): Promise<Book[]> {
@@ -25,18 +32,19 @@ export class BookApiRepository implements BookRepository {
 	}
 
 	async save(book: Book): Promise<void> {
-		throw new Error("save(book: Book) no implementado en el frontend. Usa addBook(payload) para crear/actualizar copias.");
-	}
-
-	async addBook(payload: { title: string; author: string; isbn: string; copies: number }): Promise<void> {
-		try {
-			await httpClient.post('/books', payload);
-		} catch (error) {
-			throw new Error((error as any).response?.data?.message || 'Error de addBook en backend.');
-		}
+		throw new Error("El método save(book: Book) no debe usarse para crear/actualizar copias. Use el formulario 'NewBookPage'.");
 	}
 
 	async updateAvailableCopies(id: string, availableCopies: number): Promise<void> {
 		await httpClient.put(`/books/${id}`, { availableCopies });
+	}
+
+	async addBook(payload: { title: string; author: string; isbn: string; totalCopies: number }): Promise<void> {
+		try {
+			await httpClient.post('/books', payload);
+		} catch (error) {
+			const backendError = (error as any).response?.data?.error;
+			throw new Error(backendError || 'Error al intentar crear/actualizar el libro.');
+		}
 	}
 }

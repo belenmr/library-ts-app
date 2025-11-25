@@ -1,12 +1,13 @@
 import { BookApiRepository } from '../api/BookApiRepository';
-import { getBooks } from '@domain/use-cases/get-books';
-//import { addBook } from '@domain/use-cases/add-book';
-//import { getBook } from '@domain/use-cases/get-book';
 
 const bookRepositoryInstance = new BookApiRepository();
 
 export const bookModule = {
-	getBooks: () => getBooks({ bookRepository: bookRepositoryInstance }),
-	addBook: (payload: { title: string; author: string; isbn: string; copies: number }) =>
+	getBooks: () => bookRepositoryInstance.findAll(),
+
+	addBook: (payload: { title: string; author: string; isbn: string; totalCopies: number }) =>
 		bookRepositoryInstance.addBook(payload),
+
+	getBook: (bookId: string) => bookRepositoryInstance.findById(bookId),
 };
+
