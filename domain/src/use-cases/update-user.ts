@@ -7,7 +7,7 @@ interface UpdateUserDeps {
 }
 
 // --- Datos de Entrada ---
-interface UpdateUserPayload {
+export interface UpdateUserPayload {
     userIdToUpdate: string;
     name?: string;
 	surname?: string;

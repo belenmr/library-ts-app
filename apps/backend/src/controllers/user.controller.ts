@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
-import type { User, Role } from '@domain/entities/user'; 
+import type { User } from '@domain/entities/user';
+import { UpdateUserPayload } from '@domain/use-cases/update-user';
 
-// --- Definiciones de Tipos de Casos de Uso (Firmas) ---
+
 type RegisterUseCase = (payload: any) => Promise<User | Error>;
 type GetUserUseCase = (payload: { userId: string }) => Promise<User | Error>;
-type GetUsersUseCase = () => Promise<User[]>; // Retorna Promise<User[]> debido a la firma simple
+type GetUsersUseCase = () => Promise<User[]>;
 type UpdateUserUseCase = (payload: any) => Promise<User | Error>;
 
 export interface UserControllerDeps {
@@ -15,14 +16,14 @@ export interface UserControllerDeps {
 }
 
 export class UserController {
-    constructor(private readonly deps: UserControllerDeps) {}
+    constructor(private readonly deps: UserControllerDeps) { }
 
     // ------------------------------------
     // POST /register
     // ------------------------------------
     public register = async (req: Request, res: Response) => {
         const { name, surname, email, password, roleToCreate } = req.body;
-        
+
         // NOTA: El executorRole debe venir de un middleware de autenticación/autorización
         // Aquí simulamos que es un ADMIN para poder ejecutar la función de Dominio.
         const executorRole = 'ADMIN' as any; // Simulación para que el CU funcione
@@ -42,7 +43,7 @@ export class UserController {
             return res.status(500).json({ error: 'Internal server error.' });
         }
     }
-    
+
     // ------------------------------------
     // GET /users/:id
     // ------------------------------------
@@ -55,19 +56,19 @@ export class UserController {
 
         try {
             const result = await this.deps.getUserUseCase({ userId: id });
-            
+
             if (result instanceof Error) {
                 // Error 404 Not Found (ej. User not found)
                 return res.status(404).json({ error: result.message });
             }
-            
+
             // Éxito: 200 OK
             return res.status(200).json(result);
         } catch (error) {
             return res.status(500).json({ error: 'Internal server error.' });
         }
     }
-    
+
     // ------------------------------------
     // GET /users
     // ------------------------------------
@@ -76,36 +77,36 @@ export class UserController {
             // NOTA: El middleware de autorización (ADMIN/LIBRARIAN) DEBE verificar
             // el permiso antes de que se ejecute este handler.
             const result = await this.deps.getUsersUseCase();
-            
+
             // El CU getUsers devuelve Promise<User[]>, por lo que no debería ser Error
             if (Array.isArray(result)) {
                 return res.status(200).json(result);
             }
-            
+
             return res.status(500).json({ error: 'Unexpected error getting users.' });
 
         } catch (error) {
             return res.status(500).json({ error: 'Internal server error.' });
         }
     }
-    
+
     // ------------------------------------
     // PUT /users/:id
     // ------------------------------------
     public updateUser = async (req: Request, res: Response) => {
         const { id } = req.params;
-        
+
         // El payload debe ser una mezcla del ID del URL y el cuerpo de la petición
         const payload: UpdateUserPayload = { userIdToUpdate: id, ...req.body };
-        
+
         try {
             const result = await this.deps.updateUserUseCase(payload);
-            
+
             if (result instanceof Error) {
-                 // 404 si el usuario a actualizar no existe
+                // 404 si el usuario a actualizar no existe
                 return res.status(404).json({ error: result.message });
             }
-            
+
             return res.status(200).json(result);
         } catch (error) {
             return res.status(500).json({ error: 'Internal server error.' });
