@@ -1,5 +1,3 @@
-// apps/frontend/src/pages/UpdateBookPage.tsx
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { bookModule } from '../utils/bookModule';
 import type { Book } from '@domain/entities';

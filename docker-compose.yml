@@ -1,0 +1,19 @@
+name: "library"
+services:
+    backend:
+        build:
+            dockerfile: Dockerfile.backend
+            context: .
+        image: library-backend
+        container_name: library_backend
+        ports:
+           - "3000:3000"
+
+    frontend:
+        build:
+            dockerfile: Dockerfile.frontend
+            context: .
+        image: library-frontend
+        container_name: library_frontend
+        ports:
+            - "5173:5173"

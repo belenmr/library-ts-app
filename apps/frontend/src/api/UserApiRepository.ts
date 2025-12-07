@@ -1,6 +1,6 @@
 import { type User, RoleName } from '@domain/entities/index';
 import type { UserRepository } from '@domain/repositories/user.repository';
-import { httpClient } from './httpClient';
+import { httpClient } from './httpClient.js';
 
 export class UserApiRepository implements UserRepository {
 

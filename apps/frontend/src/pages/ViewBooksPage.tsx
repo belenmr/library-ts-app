@@ -1,7 +1,5 @@
-// apps/frontend/src/pages/ViewBooksPage.tsx
-
 import React, { useEffect, useState, useCallback } from 'react';
-import { bookModule } from '../utils/bookModule';
+import { bookModule } from '../utils/bookModule.ts';
 import type { Book } from '@domain/entities';
 import { useNavigate } from 'react-router-dom';
 

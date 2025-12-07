@@ -1,6 +1,6 @@
 import type { Book } from '@domain/entities/index';
 import type { BookRepository } from '@domain/repositories/book.repository';
-import { httpClient } from './httpClient';
+import { httpClient } from '@domain/api/httpClient';
 
 export class BookApiRepository implements BookRepository {
 

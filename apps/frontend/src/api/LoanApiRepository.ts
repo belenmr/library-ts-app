@@ -1,6 +1,6 @@
 import type { Loan, LoanStatus } from '@domain/entities';
 import type { LoanRepository } from '@domain/repositories/loan.repository';
-import { httpClient } from './httpClient';
+import { httpClient } from '@domain/api/httpClient';
 
 export class LoanApiRepository implements LoanRepository {
 

@@ -1,0 +1,24 @@
+FROM node:22-slim
+
+WORKDIR /app
+
+# Añade instalación de OpenSSL para que Prisma funcione sin warnings
+RUN apt-get update && apt-get install -y openssl
+
+# Copia de dependencias para la instalación
+COPY tsconfig.json ./
+COPY package.json package-lock.json ./
+COPY domain/package*.json ./domain/
+COPY apps/backend/package*.json ./apps/backend/
+
+RUN npm install --prefix ./domain
+RUN npm install --prefix ./apps/backend
+
+COPY ./ ./
+
+RUN npm run db:generate --prefix ./apps/backend
+RUN npm run db:seed --prefix ./apps/backend
+
+EXPOSE 3000
+
+CMD ["npm", "run", "dev", "--prefix", "./apps/backend"]
